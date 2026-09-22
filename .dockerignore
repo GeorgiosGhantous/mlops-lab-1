@@ -1,0 +1,30 @@
+# Python virtualenv / caches
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Data & MLflow state (large, not needed in the image)
+data/
+mlruns/
+mlflow.db
+mlartifacts/
+
+# Git & editor
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Docker itself
+Dockerfile
+Dockerfile.naive
+.dockerignore
+
+# Docs / notebooks / env files (keep README.md for package metadata)
+**/*.ipynb
+.env
+.env.*
