@@ -1,0 +1,16 @@
+MLOPS LAB2
+
+Q1 - In uv.lock the packages that we just installed have been added alongside their details and as for pyproject.toml, in dependencies list we same things packages were added with the version they were installed in
+'Q2- It tells MLFlow where to store experiment metadata(backend-store-uri). It specifies the default location where MLflow stores artifacts (default-artifact-root). MLflow stores metadata (parameters, metrics, tags, run info) in its backend database, while artifacts (models, images, files) are stored in the artifact store.
+
+Q3 - because they are local, continuously changing MLflow tracking data rather than source code, and shouldn't be tracked by DVC because DVC is meant for versioning large datasets/models/artifacts—not MLflow's own tracking database and metadata.
+
+Q4- It says that an experiment with name "food11" does not exist. And after checking the UI, we see that a new experiment with name "food11" has been created
+
+Q5 - log_param logs fixed training parameters such as learning rate and batch size, while log_metric logs changing performance values such as loss and accuracy. log_metric uses step to record the metric at a specific point in training, such as an epoch, so MLflow can track and visualize its progress.
+
+Q6 - The model lives as real file under mlruns/
+
+Q7- The best learning rate came at 0.001. No higher is not always better
+
+Q8- 0.0001 - 0.001 - 0.01. Best one is 0.0001

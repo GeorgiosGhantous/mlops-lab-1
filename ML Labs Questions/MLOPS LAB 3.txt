@@ -1,0 +1,17 @@
+MLOPS LAB 3
+
+Q1 ----------------
+The model was given version 1. the artifact is just files under mlruns/ tied permanently to that one run, however the registered model is a separate name entity.
+Q2 ------------------
+Aliases replace the Staging, Production, Archived Tags, we version so that we get a easier name to reference the model. It's easier to remember and write.
+
+Q3 --------------------
+because the URI bundles the architecture, weights, and environment together and always resolves to whichever version currently holds the alias. In order to serve a newer model version we just give it the champion alias.
+Q4 --------------------
+We copy pyproject.toml and uv.lock and run uv sync before copying the source code so Docker can cache the dependency installation layer. These files only change when the project dependencies change, so Docker does not need to reinstall the dependencies every time the source code changes.
+Q6 -------------------------
+Forgetting .dockerignore makes every build smaller because the Docker Daemon receives the entire .venv/ .... as build context
+Q7 -------------------------
+It's not the host but a container, host.docker.internal resolves to the host machine's IP so containers can reach the services that are running there.
+Q9 --------------------------
+To allow another machine to pull and run the exact image, we must push it to a remote container registry with a specific tag (or digest) and ensure the target machine has the credentials and configuration to pull that exact version.

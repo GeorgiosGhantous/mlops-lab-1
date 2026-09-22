@@ -1,0 +1,12 @@
+MLOPS lAB 1
+
+Q1- The files that were created are: .python-version, pyproject.toml, README.md and __init__.py and they should contain the project dependencies and the versions.
+
+Q2 - The files that were created are: .dvcignore, .dvc/btime, .dvc/.gitignore, .dvc/config, out of these .dvcignore, .dvc/.gitignore, .dvc/config are the files that should be commited, dvc is related to data storage so those files will say where our data lives, tells which files to skip and tells git not to trach dvc's internal cache.
+
+Q3- Credentials with global are stored on the machine. Other than --global we have --local where the credentials will be stored inside a config file. No credentials should not be pushed to GitHub.
+
+Q4- In .gitignore, the data folder got included
+
+Q5- Yes a data.dvc file got created and it contains informarions about the data like size, nfiles, path, hash, md5
+
