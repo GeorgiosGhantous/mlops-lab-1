@@ -1,0 +1,19 @@
+Q1.  Without a volume, mlflow’s database and artifacts in /mlflow-data live in the container’s writable layer, which is deleted along with the container. After docker rm and a fresh docker run, the UI showed only Default, so the test-experiment I created was gone. Any runs and registered models would be lost the same way, which is why a volume is needed.
+
+Q2. A bind mount would work, but a named volume is better here: Docker manages it, so there are no host path or permission problems, and it keeps mlflow.db out of your repo. Bind mounts suit source code you edit live, not runtime data the container owns.
+
+Q3. Reading INFERENCE_URL from an environment variable lets the same frontend image work in different setups without rebuilding. Inside Compose it’s set to http://inference:8000 (the service name), but if you docker run the frontend alone, there’s no Compose network and inference doesn’t resolve, so a hardcoded URL would fail. With an env variable you just pass -e INFERENCE_URL=http://host.docker.internal:8000 (or any other address), and the default http://127.0.0.1:8000 covers local runs outside Docker.
+
+Q4. A published port is only needed when something outside Docker (like your browser) must reach the container. Nobody on your host calls the inference API directly, only the frontend does, and that traffic stays inside the Compose network.
+
+Q5. If mlflow isn’t accepting connections yet, the model load in serve.py raises a connection error that nothing catches, so the inference container crashes and exits. Compose doesn’t restart it by default, which leaves mlflow and the frontend running with inference stopped, and docker compose logs inference shows the traceback.
+
+Q6. If mlflow isn’t ready yet, the model load in serve.py fails with a connection error that nothing catches, so the inference container crashes and exits. Compose doesn’t restart it by default, so mlflow and the frontend keep running while inference stays stopped, and docker compose logs inference shows the traceback.
+
+Q7. ocker compose ps lists published ports for mlflow (0.0.0.0:5000->5000/tcp) and frontend (0.0.0.0:8501->8501/tcp). inference shows only its internal port (8000/tcp) with no host mapping. That matches the compose file, since only those two services have a ports: entry.
+
+Q8. The prediction still comes from the old model version, because serve.py loads the model once at startup and keeps it in memory. docker compose restart inference restarts only that container, so serve.py runs again and loads the new Staging version.
+
+Q9. restart works because the image contains only the code and dependencies, while the model is fetched from mlflow each time the container starts. Changing the Staging version changes what mlflow serves, not what is in the image, so no rebuild is needed.
+
+Q10. After docker compose down and up, the registered model and its Staging assignment are still there, because down removes containers and the network but keeps the named volume mlflow-data holding the database and artifacts. After docker compose down -v and up, the volume is deleted, so mlflow starts empty with no experiments, registered models or Staging assignment (and inference will fail to load a model until you register one again).
